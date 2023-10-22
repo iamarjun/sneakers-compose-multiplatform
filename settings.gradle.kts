@@ -9,6 +9,9 @@ pluginManagement {
         mavenCentral()
         google()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven {
+            url = uri("https://repo.repsy.io/mvn/chrynan/public")
+        }
     }
 
     plugins {
@@ -36,5 +39,8 @@ dependencyResolutionManagement {
         mavenCentral()
         google()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven {
+            url = uri("https://repo.repsy.io/mvn/chrynan/public")
+        }
     }
 }

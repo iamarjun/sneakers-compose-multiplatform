@@ -36,6 +36,8 @@ kotlin {
                 implementation("io.insert-koin:koin-core:3.5.0")
                 // https://mvnrepository.com/artifact/io.insert-koin/koin-compose
                 implementation("io.insert-koin:koin-compose:1.1.0")
+                implementation("com.chrynan.navigation:navigation-core:0.10.0")
+                implementation("com.chrynan.navigation:navigation-compose:0.10.0")
             }
         }
         val androidMain by getting {
