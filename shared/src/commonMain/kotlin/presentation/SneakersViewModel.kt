@@ -1,8 +1,10 @@
 package presentation
 
 import BaseViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import model.Sneaker
 import usecases.CartManager
 import usecases.GetSneakerList
 
@@ -11,6 +13,9 @@ class SneakersViewModel(
     private val cartManager: CartManager
 ) :
     BaseViewModel<SneakersScreenContract.Event, SneakersScreenContract.State, SneakersScreenContract.Effect>() {
+
+    val currentSelectedSneaker by lazy { MutableStateFlow<Sneaker?>(null) }
+
     override fun createInitialState(): SneakersScreenContract.State {
         return SneakersScreenContract.State()
     }
@@ -20,6 +25,12 @@ class SneakersViewModel(
             is SneakersScreenContract.Event.AddToCart -> {
                 viewModelScope.launch {
                     cartManager.saveSneakerToCart(event.sneaker)
+                }
+            }
+
+            is SneakersScreenContract.Event.OnClick -> {
+                viewModelScope.launch {
+                    currentSelectedSneaker.emit(event.sneaker)
                 }
             }
 

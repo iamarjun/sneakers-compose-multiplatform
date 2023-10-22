@@ -13,13 +13,16 @@ import androidx.compose.runtime.getValue
 import com.chrynan.navigation.ExperimentalNavigationApi
 import com.chrynan.navigation.compose.NavigationContainer
 import com.chrynan.navigation.compose.rememberNavigator
+import com.chrynan.navigation.popDestination
 import com.chrynan.navigation.push
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import navigation.AppDestination
 import org.koin.compose.getKoin
-import presentation.SneakersScreen
 import presentation.SneakersViewModel
+import presentation.components.CartScreenComposable
+import presentation.components.DetailScreenComposable
+import presentation.components.HomeScreenComposable
 import usecases.CartManager
 import usecases.GetSneakerList
 
@@ -59,28 +62,18 @@ fun App() {
         ) {
             NavigationContainer(navigator = navigator) { (destination, context) ->
                 when (destination) {
-                    AppDestination.HOME -> HomeScreenComposable(viewModel)
-                    AppDestination.CART -> SearchScreenComposable(viewModel)
-                    AppDestination.DETAIL -> DetailScreenComposable(viewModel)
+                    AppDestination.HOME -> HomeScreenComposable(viewModel) {
+                        navigator.push(AppDestination.DETAIL)
+                    }
+
+                    AppDestination.CART -> CartScreenComposable(viewModel)
+                    AppDestination.DETAIL -> DetailScreenComposable(viewModel) {
+                        navigator.popDestination()
+                    }
                 }
             }
         }
     }
-}
-
-@Composable
-fun DetailScreenComposable(viewModel: SneakersViewModel) {
-
-}
-
-@Composable
-fun SearchScreenComposable(viewModel: SneakersViewModel) {
-
-}
-
-@Composable
-fun HomeScreenComposable(viewModel: SneakersViewModel) {
-    SneakersScreen(viewModel)
 }
 
 expect fun getPlatformName(): String

@@ -9,6 +9,7 @@ object SneakersScreenContract {
 
     sealed class Event : UiEvent {
         data class AddToCart(val sneaker: Sneaker) : Event()
+        data class OnClick(val sneaker: Sneaker) : Event()
 
     }
 
