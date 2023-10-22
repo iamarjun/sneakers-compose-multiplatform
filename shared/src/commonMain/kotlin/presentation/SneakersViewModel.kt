@@ -1,10 +1,15 @@
 package presentation
 
 import BaseViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import usecases.CartManager
 import usecases.GetSneakerList
 
-class SneakersViewModel(private val sneakers: GetSneakerList) :
+class SneakersViewModel(
+    private val sneakers: GetSneakerList,
+    private val cartManager: CartManager
+) :
     BaseViewModel<SneakersScreenContract.Event, SneakersScreenContract.State, SneakersScreenContract.Effect>() {
     override fun createInitialState(): SneakersScreenContract.State {
         return SneakersScreenContract.State()
@@ -12,7 +17,12 @@ class SneakersViewModel(private val sneakers: GetSneakerList) :
 
     override fun handleEvent(event: SneakersScreenContract.Event) {
         when (event) {
-            is SneakersScreenContract.Event.AddToCart -> {}
+            is SneakersScreenContract.Event.AddToCart -> {
+                viewModelScope.launch {
+                    cartManager.saveSneakerToCart(event.sneaker)
+                }
+            }
+
             else -> {}
         }
     }
@@ -46,6 +56,12 @@ class SneakersViewModel(private val sneakers: GetSneakerList) :
                         )
                     }
                 }
+        }
+
+        viewModelScope.launch {
+            cartManager.totalCartPrice.collectLatest {
+                println("----------- $it")
+            }
         }
     }
 

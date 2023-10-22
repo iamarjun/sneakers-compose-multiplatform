@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 import network.SneakersApiImp
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
+import usecases.CartManager
 import usecases.GetSneakerList
 
 val commonModule = module {
@@ -18,6 +19,7 @@ val commonModule = module {
     singleOf(::SneakersApiImp)
     singleOf(::SneakersRepository)
     singleOf(::GetSneakerList)
+    singleOf(::CartManager)
 }
 
 fun provideHttpClient(json: Json) = HttpClient {
