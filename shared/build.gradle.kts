@@ -33,6 +33,9 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.5")
                 api("dev.icerock.moko:mvvm-core:0.16.1")
                 api("dev.icerock.moko:mvvm-compose:0.16.1")
+                implementation("io.insert-koin:koin-core:3.5.0")
+                // https://mvnrepository.com/artifact/io.insert-koin/koin-compose
+                implementation("io.insert-koin:koin-compose:1.1.0")
             }
         }
         val androidMain by getting {
