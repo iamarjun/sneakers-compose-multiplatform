@@ -2,9 +2,9 @@ package presentation
 
 import BaseViewModel
 import kotlinx.coroutines.launch
-import usecases.GetSneakers
+import usecases.GetSneakerList
 
-class SneakersViewModel(private val sneakers: GetSneakers) :
+class SneakersViewModel(private val sneakers: GetSneakerList) :
     BaseViewModel<SneakersScreenContract.Event, SneakersScreenContract.State, SneakersScreenContract.Effect>() {
     override fun createInitialState(): SneakersScreenContract.State {
         return SneakersScreenContract.State()
@@ -12,7 +12,7 @@ class SneakersViewModel(private val sneakers: GetSneakers) :
 
     override fun handleEvent(event: SneakersScreenContract.Event) {
         when (event) {
-
+            is SneakersScreenContract.Event.AddToCart -> {}
             else -> {}
         }
     }

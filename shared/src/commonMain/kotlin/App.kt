@@ -20,14 +20,15 @@ import navigation.AppDestination
 import org.koin.compose.getKoin
 import presentation.SneakersScreen
 import presentation.SneakersViewModel
-import usecases.GetSneakers
+import usecases.GetSneakerList
 
 @OptIn(ExperimentalNavigationApi::class)
 @Composable
 fun App() {
     MaterialTheme {
-        val getSneakers: GetSneakers = getKoin().get()
-        val viewModel = getViewModel(Unit, viewModelFactory { SneakersViewModel(getSneakers) })
+        val getSneakers: GetSneakerList = getKoin().get()
+        val viewModel =
+            getViewModel(Unit, viewModelFactory { SneakersViewModel(getSneakers) })
         val navigator = rememberNavigator(initialDestination = AppDestination.HOME)
         Scaffold(
             bottomBar = {

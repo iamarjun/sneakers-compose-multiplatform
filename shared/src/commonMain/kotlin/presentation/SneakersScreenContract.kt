@@ -8,6 +8,8 @@ import model.Sneaker
 object SneakersScreenContract {
 
     sealed class Event : UiEvent {
+        data class AddToCart(val sneaker: Sneaker) : Event()
+
     }
 
     sealed class Effect : UiEffect {

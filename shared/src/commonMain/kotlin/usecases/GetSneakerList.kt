@@ -1,17 +1,10 @@
 package usecases
 
+import domain.SneakersRepository
 import model.Sneaker
-import network.SneakersApiImp
 
-class GetSneakers(
-    private val sneakersApi: SneakersApiImp
-) {
+class GetSneakerList(private val sneakersRepository: SneakersRepository) {
     suspend operator fun invoke(): Result<List<Sneaker>> {
-        return try {
-            val list = sneakersApi.getSneakerList()
-            Result.success(list)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return sneakersRepository.getSneakerList()
     }
 }
