@@ -1,35 +1,48 @@
 package usecases
 
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import model.Sneaker
 
 class CartManager {
-    private val quantity by lazy { HashMap<String, Int>() }
-    private val price by lazy { HashMap<String, Int>() }
+    private val _sneakers by lazy { mutableStateMapOf<String, Sneaker>() }
+    private val _quantity by lazy { mutableStateMapOf<String, Int>() }
+    private val _price by lazy { mutableStateMapOf<String, Int>() }
     private val _totalCartPrice by lazy { MutableStateFlow(0) }
+
+    val sneaker: SnapshotStateMap<String, Sneaker>
+        get() = _sneakers
+    val quantity: SnapshotStateMap<String, Int>
+        get() = _quantity
+    val price: SnapshotStateMap<String, Int>
+        get() = _price
     val totalCartPrice
         get() = _totalCartPrice.asStateFlow()
 
     suspend fun saveSneakerToCart(sneaker: Sneaker) {
-        quantity[sneaker.id] = (quantity[sneaker.id] ?: 0) + 1
-        if (!price.containsKey(sneaker.id))
-            price[sneaker.id] = sneaker.retailPrice
+        _sneakers[sneaker.id] = sneaker
+        _quantity[sneaker.id] = (_quantity[sneaker.id] ?: 0) + 1
+        if (!_price.containsKey(sneaker.id))
+            _price[sneaker.id] = sneaker.retailPrice
 
-        calculateTotalCart(sneaker)
+        calculateTotalCart()
     }
 
     suspend fun deleteSneakerFromCart(sneaker: Sneaker) {
-        if (quantity.containsKey(sneaker.id) && quantity[sneaker.id]!! > 0)
-            quantity[sneaker.id] = (quantity[sneaker.id] ?: 0) - 1
+        if (_quantity.containsKey(sneaker.id) && _quantity[sneaker.id]!! > 1)
+            _quantity[sneaker.id] = (_quantity[sneaker.id] ?: 0) - 1
+        else
+            _sneakers.remove(sneaker.id)
 
-        calculateTotalCart(sneaker)
+        calculateTotalCart()
     }
 
-    private suspend fun calculateTotalCart(sneaker: Sneaker) {
+    private suspend fun calculateTotalCart() {
         coroutineScope {
-            val total = quantity.keys.sumOf { quantity[it]!! * price[it]!! }
+            val total = _sneakers.keys.sumOf { _quantity[it]!! * _price[it]!! }
             _totalCartPrice.emit(total)
         }
     }

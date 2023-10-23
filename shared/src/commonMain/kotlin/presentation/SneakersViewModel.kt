@@ -11,10 +11,15 @@ import usecases.GetSneakerList
 class SneakersViewModel(
     private val sneakers: GetSneakerList,
     private val cartManager: CartManager
-) :
-    BaseViewModel<SneakersScreenContract.Event, SneakersScreenContract.State, SneakersScreenContract.Effect>() {
+) : BaseViewModel<SneakersScreenContract.Event, SneakersScreenContract.State, SneakersScreenContract.Effect>() {
 
     val currentSelectedSneaker by lazy { MutableStateFlow<Sneaker?>(null) }
+
+    val total
+        get() = cartManager.totalCartPrice
+
+    val sneaker
+        get() = cartManager.sneaker
 
     override fun createInitialState(): SneakersScreenContract.State {
         return SneakersScreenContract.State()
@@ -31,6 +36,12 @@ class SneakersViewModel(
             is SneakersScreenContract.Event.OnClick -> {
                 viewModelScope.launch {
                     currentSelectedSneaker.emit(event.sneaker)
+                }
+            }
+
+            is SneakersScreenContract.Event.RemoveFromCart -> {
+                viewModelScope.launch {
+                    cartManager.deleteSneakerFromCart(event.sneaker)
                 }
             }
 
